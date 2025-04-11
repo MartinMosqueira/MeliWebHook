@@ -1,0 +1,20 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Interfaz Simple</title>
+</head>
+<body>
+    <h1>Pagar producto</h1>
+  <button onclick="crearLink()">Pagar ahora</button>
+
+  <script>
+    async function crearLink() {
+      const res = await fetch("/crear-link", { method: "POST" });
+      const data = await res.json();
+      window.location.href = data.init_point;
+    }
+  </script>
+</body>
+</html>
