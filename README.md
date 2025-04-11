@@ -1,3 +1,5 @@
+Mirar unicamente el index.js 🚧
+
 ### Requisitos 📄
 - Crearse una integracion en meradopago de tipo checkout PRO, ya que la checkout API te pide que crees todo vos, hasta el formulario de pago.
 
@@ -11,16 +13,20 @@
 ```javascript
 notification_url: "Ip completa aca"
 ```
-7- Levante el back:
+7- Instalar dependenias:
+```shell
+npm install
+```
+8- Levante el back:
 ```shell
 node index.js
 ```
-8- Acceder a localhost:3000, precionar pagar, y colocar una cuenta real para efectuar el pago.
+9- Acceder a localhost:3000, precionar pagar, y colocar una cuenta real para efectuar el pago.
 
-9- Ver que larga la consola.
+10- Ver que larga la consola.
 
 ### ✅ Pasos que necesitas hacer o tener de lo anterior:
-1 - 2 - 3 - 4: esto se deberia solucionar con las cloud functions? - 5 - 6-
+1 - 2 - 3 - 4: esto se deberia solucionar con las cloud functions? - 5 - 6 - 7: solo la de mercadopago.
 
 ### 👷 Que hay que hacer?
 - La idea es generar dos cloud functions en firebase para las dos funciones del codigo.
