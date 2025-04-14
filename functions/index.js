@@ -9,6 +9,13 @@ const preference = new Preference(client);
 const payment = new Payment(client);
 
 exports.crearLinkDePago = functions.https.onRequest(async (req, res) => {
+    const { userId } = req.body;
+    const externalReferenceData = JSON.stringify({ userId }); 
+
+    if(!userId) {
+        return res.status(400).send("Faltan datos");
+    }
+
     try {
         const body = {
           auto_return: "approved", 
@@ -19,7 +26,7 @@ exports.crearLinkDePago = functions.https.onRequest(async (req, res) => {
           },
           statement_descriptor: "CityPooling",
           binary_mode: true,
-          external_reference: "dato desde la db",
+          external_reference: externalReferenceData,
           items: [
             {
               title: "Comision por viaje CityPooling",
@@ -58,14 +65,16 @@ exports.webhookPago = functions.https.onRequest(async (req, res) => {
       const paymentData = await payment.get({ id: paymentId });
 
       console.log("✅ Pago recibido:");
-
+    
+      //important payment data
       const externalReference = paymentData.external_reference;
       const status = paymentData.status;
       const payerEmail = paymentData.payer.email;
+      const price = paymentData.transaction_details.total_paid_amount;
 
-      console.log("Referencia externa:", externalReference);
-      console.log("Estado del pago:", status);
-      console.log("Email del pagador:", payerEmail);
+      if(status === "approved") {
+        //connect to database and update user
+      }
 
     } catch (err) {
       console.error("❌ Error al consultar el pago:", err);

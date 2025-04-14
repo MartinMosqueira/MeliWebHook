@@ -10,7 +10,7 @@ app.use(express.static("public"));
 
 
 const client = new MercadoPagoConfig({
-  accessToken: "APP_USR-3574098269162249-040816-701d222d34f57029c2d0325cd437f07f-315320402" //acces token de produccion de la cuenta de mercadopago
+  accessToken: "{your acces token mercadopago}" //acces token de produccion de la cuenta de mercadopago
 });
 
 const preference = new Preference(client);
@@ -62,7 +62,7 @@ app.post("/crear-link", async (req, res) => {
         installments: 6, //maximo de cuotas permitidas
         default_payment_method_id: "account_money" //método de pago por defecto en este caso dinero de mercadopago
     },
-      notification_url: "https://1d1a-201-190-175-59.ngrok-free.app/api/webhook", //url a la que se envian los webhooks
+      notification_url: "https:{your url cloud funtion webhookPago}/api/webhook", //url a la que se envian los webhooks
       expires: false, //el link va a expirar si es true
       //expiration_date_from: "2024-01-01T12:00:00.000-04:00", //fecha de inicio de validez del link
       //expiration_date_to: "2024-12-31T12:00:00.000-04:00" //fecha de fin de validez del link
