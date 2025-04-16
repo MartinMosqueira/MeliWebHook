@@ -1,37 +1,53 @@
-Mirar unicamente el index.js 🚧
+🚧  Las cloud functions estan en `functions/createPaymentLink.js` y `functions/paymentWebHook.js` 
 
 ### Requisitos 📄
 - Crearse una integracion en meradopago de tipo checkout PRO, ya que la checkout API te pide que crees todo vos, hasta el formulario de pago.
 
-### Pasos que hice yo para que funcionara todo 🚀
-1-  Me cree una integracion en meradopago de tipo checkout PRO con mi cuenta personal.
-2- Me cree mis credenciales de produccion.
-3- Copie el token de produccion en mi codigo.
-4- Use [Ngrok](https://ngrok.com) para que mi proyecto en local tenga una ip publica momentanea ya que le webhook de mercadopago nescesita encontrar esa funcion.
-5- Cree el webhook en mercadopago con la ip publica completa es decir: ip Ngrok + /api/webhook.
+### Pasos que hice yo para que funcionara todo para levantar este proyecto🚀
+1-  Me cree una integracion en meradopago de tipo checkout PRO con mi cuenta personal.  
+2- Me cree mis credenciales de produccion.  
+3- Copie el token de produccion en mi codigo.  
+4- Use [Ngrok](https://ngrok.com) para que mi proyecto en local tenga una ip publica momentanea ya que le webhook de mercadopago nescesita encontrar esa funcion.  
+5- Cree el webhook en mercadopago con la ip publica completa es decir: ip Ngrok + /api/webhook.  
 6- Copie esa misma ip completa en mi codigo en la primera funcion del link de pago para que encuentre el webhook:
 ```javascript
 notification_url: "Ip completa aca"
-```
+```  
 7- Instalar dependenias:
 ```shell
 npm install
-```
+```  
 8- Levante el back:
 ```shell
 node index.js
-```
-9- Acceder a localhost:3000, precionar pagar, y colocar una cuenta real para efectuar el pago.
-
+```  
+9- Acceder a localhost:3000, precionar pagar, y colocar una cuenta real para efectuar el pago.  
 10- Ver que larga la consola.
 
-### ✅ Pasos que necesitas hacer o tener de lo anterior:
-1 - 2 - 3 - 4: esto se deberia solucionar con las cloud functions? - 5 - 6 - 7: solo la de mercadopago.
+### ✅ Pasos que necesitas hacer o tener de lo anterior para que funcione en flutterflow:
+1 - 2 - 3 - 4: esto se deberia solucionar con las cloud functions? - 5 - 6 - 7: solo la de mercadopago "npm install mercadopago".
 
 ### 👷 Que hay que hacer?
 - La idea es generar dos cloud functions en firebase para las dos funciones del codigo.
 - La primera funcion del link de pago guardaria el init point que retorna esta funcion, esta funcion almacena en si datos del pago y referencias que le queramos agregar como un userId, ordenId asociado a la base de datos del usuario que paga en `external_reference` por ejemplo. Todos estos datos se recuperan automaticamente despues con la segunda funcion del webhook. Esta funcion se ejecutaria al hacer click en algun boton de pago.
-- La segunda funcion se traeria todos los datos de pago y referencias de la db en caso de haberlas, en esta cloud funcion se ejecutaria la logica de la db para actualizar el pago del usuario si esta aprobado o no.
+- La segunda funcion se traeria todos los datos de pago y referencias de la db en caso de haberlas, en esta cloud funcion se ejecutaria la logica de la db para actualizar el pago del usuario si esta aprobado o no.  
+
+Primera cloud function en: `functions/createPaymentLink.js`  
+* Necesitas hacer una solicitud POST mandando el uid del usario, por ejemplo:
+```json
+{
+	"uid": "7OscUjdeFeMRAU9sBMVjUWEEdEv2"
+}
+``` 
+Respuesta:
+```json
+{
+  "status": "success",
+  "link": "https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=1234567890"
+}
+```  
+Segunda cloud function en: `functions/paymentWebHook.js`  
+* Actualiza el saldo del usuario segun su uid en la db y crea un nuevo documento en la coleccion historialPagos con los datos del pago.
 
 ### 💡 Datos y Links de ayuda
 
